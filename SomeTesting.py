@@ -15,7 +15,9 @@ def main():
     def btnBClicked():
         var.set("Yolo!")
 
-    B = Button(top, text="click", command=btnBClicked)
-    B.place(x=150,y=100)
+    btnClick = Button(top, text="click", command=btnBClicked)
+    btnClick.place(x=150,y=100)
+
+
 
     top.mainloop()
