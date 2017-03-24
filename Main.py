@@ -2,7 +2,7 @@
 
 from tkinter import *
 from MenuDisplay import *
-from GameDisplay import *
+
 class ApplicationGUI(Tk):
     def __init__(self, WIDTH, HEIGHT):
         Tk.__init__(self)

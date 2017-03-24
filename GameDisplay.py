@@ -13,11 +13,12 @@ class GameScreen(BaseMenuDisplay):
         self.back = Button(self.topFrame,anchor=E, text="Back", command = self.backToMain)
         self.back.pack()
         self.back.place(x=super().winfo_screenwidth()/2,y=0, width=40,height=30)
-        self.quit = Button(self.topFrame,anchor=E, text="X",font=("Arial", 20, "bold"), command = lambda:self.top.quit())
+        self.quit = Button(self.topFrame,anchor=E, text="X",font=("Arial", 20, "bold"), command = lambda:self.top.close())
         self.quit.pack()
         self.quit.place(x=super().winfo_screenwidth()-39,y=0, width=35,height=30)
         self.addCanvas()
         self.addTank()
+        # self.addKeyListenerToCanvas()
 
     def backToMain(self):
         self.top.attributes("-fullscreen",False)
@@ -33,7 +34,17 @@ class GameScreen(BaseMenuDisplay):
         self.lblTank = Label(self.canvas, image=imgTank)
         self.lblTank.image = imgTank
         self.lblTank.pack()
-        self.lblTank.place(x=0, y=super().winfo_screenheight()/3, width=200, height=104)
+        self.lblTank.place(x=0, y=super().winfo_screenheight()*2/3, width=200, height=104)
+
+    # @staticmethod
+    # def leftKey(event):
+    #     print("left clicked")
+    # @staticmethod
+    # def rightKey(event):
+    #     print("right clicked")
     #
-    # def leftKey(self,event):
-    #     self.lblTank.
+    # def addKeyListenerToCanvas(self):
+    #     self.canvas.bind('<Left>',self.leftKey)
+    #     self.canvas.bind('<Right>',self.rightKey)
+    #     self.canvas.focus_set()
+

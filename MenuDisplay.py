@@ -65,7 +65,7 @@ class LevelSelectMenu(BaseMenuDisplay):
         self.buttonFrame = Frame(self)
         self.buttonFrame.pack(fill=BOTH, expand=True)
 
-        self.level1Button = Button(self.buttonFrame, text = "Level 1", font=("Arial", 24, "bold"), command=self.playGame())
+        self.level1Button = Button(self.buttonFrame, text = "Level 1", font=("Arial", 24, "bold"), command=self.playGame)
         self.level1Button.grid(row = 0, padx = 10, pady=10)
 
         self.level2Button = Button(self.buttonFrame, text="Level 2",font=("Arial", 24, "bold"),  state=DISABLED)

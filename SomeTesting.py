@@ -9,12 +9,14 @@ def main():
     HEIGHT = 1000
     top = Tk()
     top.geometry(str(WIDTH) + "x" + str(HEIGHT))
+    frame = Frame(top, width=WIDTH, height = HEIGHT)
+    frame.pack()
 
-    canvas = Canvas(top, width = WIDTH, height = HEIGHT)
+    canvas = Canvas(frame, width = WIDTH, height = HEIGHT)
     canvas.pack()
 
     setUpMainMenu(top, canvas)
-    setUpImage(top)
+    addKeyListenerToCanvas(canvas)
     top.mainloop()
 
 def setUpMainMenu(top, canvas):
@@ -31,13 +33,16 @@ def setUpMainMenu(top, canvas):
 
     btnClick = Button(canvas, text="click", command=btnBClicked)
     btnClick.place(x=150, y=100)
-def setUpImage(top):
 
-    imgTank = PhotoImage(file="tank.gif")
-    lblTank = Label(top, image=imgTank)
-    lblTank.image = imgTank
-    lblTank.pack()
-    lblTank.place(x=0,y=0)
+def addKeyListenerToCanvas(canvas):
+    def leftKey(event):
+        print("left clicked")
+    def rightKey(event):
+        print("right clicked")
+    canvas.bind('<Left>',leftKey)
+    canvas.bind('<Right>',rightKey)
+    canvas.focus_set()
+
 
 if __name__ == "__main__":
     main()
