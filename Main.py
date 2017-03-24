@@ -1,24 +1,35 @@
 #!/usr/bin/python
 
 from tkinter import *
-import MenuDisplay
+from MenuDisplay import *
+
+class ApplicationGUI(Tk):
+    def __init__(self, WIDTH, HEIGHT):
+        Tk.__init__(self)
+        self.wm_title("Tank Shooting Game")
+        self.geometry(str(WIDTH) + "x" + str(HEIGHT))
+        self.create_widgets()
+        self.resizable(0, 0)
+
+    def create_widgets(self):
+        self.master = Frame(self)
+        self.master.grid(row=0, column=0, sticky=W+E)
+        self.frames = {}
+        for f in (MainMenu, PlayGameMenu):
+            frame = f(self.master, self)
+            frame.grid(row=2, column=2, sticky=NW+SE)
+            self.frames[f] = frame
+        self.show_frame(MainMenu)
+    def show_frame(self, cls):
+        self.frames[cls].tkraise()
 
 def main():
-    WIDTH = 300
-    HEIGHT = 200
-    top = Tk()
-    top.geometry(str(WIDTH) + "x" + str(HEIGHT))
-    top.wm_title("Tank Shooting Game")
-    top.resizable(width=0, height=0)
+    WIDTH = 500
+    HEIGHT = 400
+    app = ApplicationGUI(WIDTH, HEIGHT)
 
-    setUpMainMenu(top)
+    app.mainloop() #Forever Loops
 
-    top.mainloop() #Forever Loops
-
-def setUpMainMenu(top):
-    lblName = Label(top, text="Yolo!", fg="black", bg="white")
-    lblName.pack()
-    lblName.place(x=150, y=50)
 
 if __name__ == "__main__":
     main()

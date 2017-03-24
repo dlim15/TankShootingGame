@@ -5,8 +5,8 @@ from tkinter import *
 
 
 def main():
-    WIDTH = 300
-    HEIGHT = 200
+    WIDTH = 1000
+    HEIGHT = 1000
     top = Tk()
     top.geometry(str(WIDTH) + "x" + str(HEIGHT))
 
