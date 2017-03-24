@@ -12,6 +12,10 @@ class ApplicationGUI(Tk):
         self.geometry(str(WIDTH) + "x" + str(HEIGHT))
         self.create_widgets()
         self.resizable(0, 0)
+        self.protocol("WM_DELETE_WINDOW", self.close)
+
+    def close(self):
+        self.destroy()
 
     def create_widgets(self):
         self.master = Frame(self)

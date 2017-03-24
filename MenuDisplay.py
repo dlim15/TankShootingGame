@@ -20,10 +20,16 @@ class MainMenu(BaseMenuDisplay):
         self.title.pack(fill=BOTH)
 
         self.buttonFrame = Frame(self)
-        self.buttonFrame.pack(fill = X)
+        self.buttonFrame.pack(fill = BOTH, expand = True)
 
-        self.playButton = Button(self.buttonFrame, anchor = N, text = "Play Game", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(PlayGameMenu))
+        self.playButton = Button(self.buttonFrame, anchor = N, text = " Play Game ", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(PlayGameMenu), pady = 5)
         self.playButton.pack()
+
+        self.instructionsButton = Button(self.buttonFrame, text = "Instructions", font=("Arial",24,"bold"), state=DISABLED, pady = 5)
+        self.instructionsButton.pack()
+
+        self.exitButton = Button(self.buttonFrame, text="    Exit    ", font=("Arial", 24, "bold"), command=lambda: self.top.close(), pady = 5)
+        self.exitButton.pack()
 
 class PlayGameMenu(BaseMenuDisplay):
     def create_widgets(self):
