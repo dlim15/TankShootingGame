@@ -2,25 +2,35 @@
 
 from tkinter import *
 
+
+
 def main():
-
+    WIDTH = 300
+    HEIGHT = 200
     top = Tk()
-    top.geometry("300x200")
+    top.geometry(str(WIDTH) + "x" + str(HEIGHT))
 
+    canvas = Canvas(top, width = WIDTH, height = HEIGHT)
+    canvas.pack()
 
-    var = StringVar()
-    var.set("Hello")
-    lblName = Label(top, textvariable=var)
-    lblName.pack()
-    def btnBClicked():
-        var.set("Yolo!")
-
-    btnClick = Button(top, text="click", command=btnBClicked)
-    btnClick.place(x=150,y=100)
-
-
+    setUpMainMenu(top, canvas)
 
     top.mainloop()
+
+def setUpMainMenu(top, canvas):
+    top.wm_title("Tank Shooting Game")
+    top.resizable(width=0, height=0)
+
+    var = "Hello"
+    lblName = Label(top, text=var, fg="black", bg="white")
+    lblName.pack()
+    lblName.place(x = 150, y = 50)
+
+    def btnBClicked():
+        lblName.config(text="Yolo!")
+
+    btnClick = Button(canvas, text="click", command=btnBClicked)
+    btnClick.place(x=150, y=100)
 
 if __name__ == "__main__":
     main()
