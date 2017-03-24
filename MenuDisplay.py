@@ -14,32 +14,32 @@ class BaseMenuDisplay(Frame):
 class MainMenu(BaseMenuDisplay):
     def create_widgets(self):
         self.topFrame = Frame(self, height = 200)
-        self.topFrame.grid()
+        self.topFrame.pack(side=TOP,fill=X)
 
-        self.title = Label(self.topFrame, text = "Tank Shooting Game", font = ("Arial", 24, "bold"))
-        self.title.grid(sticky=W+E)
+        self.title = Label(self.topFrame,anchor = N, text = "Tank Shooting Game", font = ("Arial", 24, "bold"))
+        self.title.pack(fill=BOTH)
 
         self.buttonFrame = Frame(self)
-        self.buttonFrame.grid()
+        self.buttonFrame.pack(fill = X)
 
-        self.playButton = Button(self.buttonFrame, text = "Play Game", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(PlayGameMenu))
-        self.playButton.grid(sticky=W+E)
+        self.playButton = Button(self.buttonFrame, anchor = N, text = "Play Game", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(PlayGameMenu))
+        self.playButton.pack()
 
 class PlayGameMenu(BaseMenuDisplay):
     def create_widgets(self):
         self.topFrame = Frame(self)
-        self.topFrame.grid()
+        self.topFrame.pack(side=TOP,fill=X)
 
         self.title = Label(self.topFrame, text="Play Game", font=("Arial", 24, "bold"))
-        self.title.grid(sticky=W)
+        self.title.pack(side=LEFT,fill=Y)
         self.back = Button(self.topFrame,anchor=E, text="Back", command = lambda: self.top.show_frame(MainMenu))
-        self.back.grid(column = 1, row = 0, sticky=E)
+        self.back.pack(side=RIGHT,fill=Y)
 
         self.buttonFrame = Frame(self)
-        self.buttonFrame.grid()
+        self.buttonFrame.pack(fill=X)
 
         self.levelsButton = Button(self.buttonFrame, text="Levels")
-        self.levelsButton.grid(column = 0, row = 1, sticky=N+S)
+        self.levelsButton.pack(side=LEFT,fill=Y,expand=True)
 
         self.sandboxButton = Button(self.buttonFrame, text="Sandbox",state=DISABLED)
-        self.sandboxButton.grid(column = 1, row = 1,sticky=N+S)
+        self.sandboxButton.pack(side = RIGHT,fill=Y,expand=True)
