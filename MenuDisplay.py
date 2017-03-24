@@ -11,6 +11,8 @@ class BaseMenuDisplay(Frame):
         """Create the widgets for the frame."""
         raise NotImplementedError
 
+
+
 class MainMenu(BaseMenuDisplay):
     def create_widgets(self):
         self.topFrame = Frame(self, height = 200)
@@ -25,6 +27,8 @@ class MainMenu(BaseMenuDisplay):
         self.playButton = Button(self.buttonFrame, anchor = N, text = "Play Game", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(PlayGameMenu))
         self.playButton.pack()
 
+from GameDisplay import *
+
 class PlayGameMenu(BaseMenuDisplay):
     def create_widgets(self):
         self.topFrame = Frame(self)
@@ -38,8 +42,11 @@ class PlayGameMenu(BaseMenuDisplay):
         self.buttonFrame = Frame(self)
         self.buttonFrame.pack(fill=X)
 
-        self.levelsButton = Button(self.buttonFrame, text="Levels")
+        self.levelsButton = Button(self.buttonFrame, text="Levels", command = self.playGame)
         self.levelsButton.pack(side=LEFT,fill=Y,expand=True)
 
         self.sandboxButton = Button(self.buttonFrame, text="Sandbox",state=DISABLED)
         self.sandboxButton.pack(side = RIGHT,fill=Y,expand=True)
+    def playGame(self):
+        self.top.attributes("-fullscreen",True)
+        self.top.show_frame(GameScreen)

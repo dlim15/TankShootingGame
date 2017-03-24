@@ -2,7 +2,7 @@
 
 from tkinter import *
 from MenuDisplay import *
-
+from GameDisplay import *
 class ApplicationGUI(Tk):
     def __init__(self, WIDTH, HEIGHT):
         Tk.__init__(self)
@@ -19,7 +19,7 @@ class ApplicationGUI(Tk):
         self.master.rowconfigure(0,weight=1)
         self.master.columnconfigure(0,weight=1)
         self.frames = {}
-        for f in (MainMenu, PlayGameMenu):
+        for f in (MainMenu, PlayGameMenu, GameScreen):
             frame = f(self.master, self)
             frame.grid(row=0, column=0, sticky=N+W+S+E)
             self.frames[f] = frame

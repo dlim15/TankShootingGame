@@ -14,7 +14,7 @@ def main():
     canvas.pack()
 
     setUpMainMenu(top, canvas)
-
+    setUpImage(top)
     top.mainloop()
 
 def setUpMainMenu(top, canvas):
@@ -31,6 +31,13 @@ def setUpMainMenu(top, canvas):
 
     btnClick = Button(canvas, text="click", command=btnBClicked)
     btnClick.place(x=150, y=100)
+def setUpImage(top):
+
+    imgTank = PhotoImage(file="tank.gif")
+    lblTank = Label(top, image=imgTank)
+    lblTank.image = imgTank
+    lblTank.pack()
+    lblTank.place(x=0,y=0)
 
 if __name__ == "__main__":
     main()
