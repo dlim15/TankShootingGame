@@ -12,6 +12,10 @@ class ApplicationGUI(Tk):
         self.geometry(str(WIDTH) + "x" + str(HEIGHT))
         self.create_widgets()
         self.resizable(0, 0)
+        self.protocol("WM_DELETE_WINDOW", self.close)
+
+    def close(self):
+        self.destroy()
 
     def create_widgets(self):
         self.master = Frame(self)
@@ -19,7 +23,7 @@ class ApplicationGUI(Tk):
         self.master.rowconfigure(0,weight=1)
         self.master.columnconfigure(0,weight=1)
         self.frames = {}
-        for f in (MainMenu, PlayGameMenu, GameScreen):
+        for f in (MainMenu, PlayGameMenu, LevelSelectMenu, GameScreen):
             frame = f(self.master, self)
             frame.grid(row=0, column=0, sticky=N+W+S+E)
             self.frames[f] = frame
