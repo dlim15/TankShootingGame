@@ -44,8 +44,48 @@ class PlayGameMenu(BaseMenuDisplay):
         self.buttonFrame = Frame(self)
         self.buttonFrame.pack(fill=BOTH, expand=True)
 
-        self.levelsButton = Button(self.buttonFrame, text="Levels")
+        self.levelsButton = Button(self.buttonFrame, text="Levels", command = lambda: self.top.show_frame(LevelSelectMenu))
         self.levelsButton.pack(side=LEFT,fill=BOTH, expand = True)
 
         self.sandboxButton = Button(self.buttonFrame, text="Sandbox",state=DISABLED)
         self.sandboxButton.pack(side = RIGHT,fill=BOTH, expand = True)
+
+class LevelSelectMenu(BaseMenuDisplay):
+    def create_widgets(self):
+        self.topFrame = Frame(self)
+        self.topFrame.pack(side=TOP, fill=X)
+
+        self.title = Label(self.topFrame, text="Level Select", font=("Arial", 24, "bold"))
+        self.title.pack(side=LEFT, fill=Y)
+        self.back = Button(self.topFrame, anchor=E, text="Back", command=lambda: self.top.show_frame(PlayGameMenu))
+        self.back.pack(side=RIGHT, fill=Y)
+
+        self.buttonFrame = Frame(self)
+        self.buttonFrame.pack(fill=BOTH, expand=True)
+
+        self.level1Button = Button(self.buttonFrame, text = "Level 1", font=("Arial", 24, "bold"), state = DISABLED)
+        self.level1Button.grid(row = 0, padx = 10, pady=10)
+
+        self.level2Button = Button(self.buttonFrame, text="Level 2",font=("Arial", 24, "bold"),  state=DISABLED)
+        self.level2Button.grid(row = 0,column=1, padx = 10, pady=10)
+
+        self.level3Button = Button(self.buttonFrame, text="Level 3",font=("Arial", 24, "bold"),  state=DISABLED)
+        self.level3Button.grid(row = 0,column=2, padx = 10, pady=10)
+
+        self.level4Button = Button(self.buttonFrame, text="Level 4", font=("Arial", 24, "bold"), state=DISABLED)
+        self.level4Button.grid(row=1, padx=10, pady=10)
+
+        self.level5Button = Button(self.buttonFrame, text="Level 5", font=("Arial", 24, "bold"), state=DISABLED)
+        self.level5Button.grid(row=1, column=1, padx=10, pady=10)
+
+        self.level6Button = Button(self.buttonFrame, text="Level 6", font=("Arial", 24, "bold"), state=DISABLED)
+        self.level6Button.grid(row=1, column=2, padx=10, pady=10)
+
+        self.level7Button = Button(self.buttonFrame, text="Level 7", font=("Arial", 24, "bold"), state=DISABLED)
+        self.level7Button.grid(row=2, padx=10, pady=10)
+
+        self.level8Button = Button(self.buttonFrame, text="Level 8", font=("Arial", 24, "bold"), state=DISABLED)
+        self.level8Button.grid(row=2, column=1, padx=10, pady=10)
+
+        self.level9Button = Button(self.buttonFrame, text="Level 9", font=("Arial", 24, "bold"), state=DISABLED)
+        self.level9Button.grid(row=2, column=2, padx=10, pady=10)
