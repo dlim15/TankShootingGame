@@ -13,7 +13,7 @@ class BaseMenuDisplay(Frame):
 
 class MainMenu(BaseMenuDisplay):
     def create_widgets(self):
-        self.topFrame = Frame(self, height = 200)
+        self.topFrame = Frame(self, height = 200, pady = 25)
         self.topFrame.pack(side=TOP,fill=X)
 
         self.title = Label(self.topFrame,anchor = N, text = "Tank Shooting Game", font = ("Arial", 24, "bold"))
@@ -36,10 +36,10 @@ class PlayGameMenu(BaseMenuDisplay):
         self.back.pack(side=RIGHT,fill=Y)
 
         self.buttonFrame = Frame(self)
-        self.buttonFrame.pack(fill=X)
+        self.buttonFrame.pack(fill=BOTH, expand=True)
 
         self.levelsButton = Button(self.buttonFrame, text="Levels")
-        self.levelsButton.pack(side=LEFT,fill=Y,expand=True)
+        self.levelsButton.pack(side=LEFT,fill=BOTH, expand = True)
 
         self.sandboxButton = Button(self.buttonFrame, text="Sandbox",state=DISABLED)
-        self.sandboxButton.pack(side = RIGHT,fill=Y,expand=True)
+        self.sandboxButton.pack(side = RIGHT,fill=BOTH, expand = True)
