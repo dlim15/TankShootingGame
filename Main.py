@@ -2,23 +2,25 @@
 
 from tkinter import *
 from MenuDisplay import *
+from GameDisplay import *
 
-class ApplicationGUI(Tk):
+
+class ApplicationGUI():
     def __init__(self, WIDTH, HEIGHT):
-        Tk.__init__(self)
-        self.rowconfigure(0,weight=1)
-        self.columnconfigure(0,weight=1)
-        self.wm_title("Tank Shooting Game")
-        self.geometry(str(WIDTH) + "x" + str(HEIGHT))
+        self.top = Tk()
+        self.top.rowconfigure(0,weight=1)
+        self.top.columnconfigure(0,weight=1)
+        self.top.wm_title("Tank Shooting Game")
+        self.top.geometry(str(WIDTH) + "x" + str(HEIGHT))
         self.create_widgets()
-        self.resizable(0, 0)
-        self.protocol("WM_DELETE_WINDOW", self.close)
+        self.top.resizable(0, 0)
+        self.top.protocol("WM_DELETE_WINDOW", self.close)
 
     def close(self):
-        self.destroy()
+        self.top.destroy()
 
     def create_widgets(self):
-        self.master = Frame(self)
+        self.master = Frame(self.top)
         self.master.pack(side="top", fill="both", expand=True)
         self.master.rowconfigure(0,weight=1)
         self.master.columnconfigure(0,weight=1)
@@ -36,7 +38,7 @@ def main():
     HEIGHT = 400
     app = ApplicationGUI(WIDTH, HEIGHT)
 
-    app.mainloop() #Forever Loops
+    app.top.mainloop() #Forever Loops
 
 
 if __name__ == "__main__":

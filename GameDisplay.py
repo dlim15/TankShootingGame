@@ -1,5 +1,7 @@
-from MenuDisplay import *
+
 from tkinter import *
+from MenuDisplay import *
+
 class GameScreen(BaseMenuDisplay):
     def create_widgets(self):
 
@@ -18,7 +20,7 @@ class GameScreen(BaseMenuDisplay):
         self.quit.place(x=super().winfo_screenwidth()-39,y=0, width=35,height=30)
         self.addCanvas()
         self.addTank()
-        # self.addKeyListenerToCanvas()
+        self.addKeyListenerToCanvas()
 
     def backToMain(self):
         self.top.attributes("-fullscreen",False)
@@ -49,15 +51,14 @@ class GameScreen(BaseMenuDisplay):
     def moveRight(self):
         self.lblTank.place(x=self.lblTank.winfo_x()+10,y=self.lblTank.winfo_y())
         # self.canvas.move(self.lblTank,10,0)
-    # @staticmethod
-    # def leftKey(event):
-    #     print("left clicked")
-    # @staticmethod
-    # def rightKey(event):
-    #     print("right clicked")
-    #
-    # def addKeyListenerToCanvas(self):
-    #     self.canvas.bind('<Left>',self.leftKey)
-    #     self.canvas.bind('<Right>',self.rightKey)
-    #     self.canvas.focus_set()
 
+    def addKeyListenerToCanvas(self):
+        self.focus_set()
+        self.bind('<Left>',leftKey)
+        self.bind('<Right>',rightKey)
+
+def leftKey(event):
+    print("left clicked")
+
+def rightKey(event):
+    print("right clicked")

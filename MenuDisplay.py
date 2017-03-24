@@ -93,5 +93,5 @@ class LevelSelectMenu(BaseMenuDisplay):
         self.level9Button.grid(row=2, column=2, padx=10, pady=10)
 
     def playGame(self):
-        self.top.attributes("-fullscreen",True)
+        self.top.top.attributes("-fullscreen",True)
         self.top.show_frame(GameScreen)
