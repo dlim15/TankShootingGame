@@ -23,7 +23,7 @@ class GameScreen(BaseMenuDisplay):
         self.addKeyListenerToCanvas()
 
     def backToMain(self):
-        self.top.attributes("-fullscreen",False)
+        self.top.top.attributes("-fullscreen",False)
         self.top.show_frame(MainMenu)
 
 
