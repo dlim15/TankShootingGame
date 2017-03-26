@@ -3,14 +3,20 @@
 from tkinter import *
 from MenuDisplay import *
 from GameDisplay import *
+import pygame
+import sys
 
 
 class ApplicationGUI():
     def __init__(self, WIDTH, HEIGHT):
+        self.running = True
+        self.frameRate = 60
+        self.clock = pygame.time.Clock()
         self.start_root(WIDTH, HEIGHT)
         self.create_widgets(MainMenu)
 
     def close(self):
+        self.running = False
         self.top.destroy()
 
     def create_widgets(self, menu):
@@ -37,7 +43,15 @@ class ApplicationGUI():
         self.top.protocol("WM_DELETE_WINDOW", self.close)
 
     def run(self):
-        self.top.mainloop()
+        while self.running:
+            fps = 60
+            dt = 1. / fps
+            #space.step(dt) TODO
+
+            self.top.update_idletasks()
+            self.top.update()
+
+            self.clock.tick(fps)
 
 def main():
     WIDTH = 500
