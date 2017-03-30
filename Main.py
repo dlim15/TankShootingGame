@@ -4,6 +4,11 @@ from tkinter import *
 from MenuDisplay import *
 from GameDisplay import *
 import pygame
+from pygame.locals import *
+from pygame.color import *
+import pymunk
+from pymunk.vec2d import Vec2d
+import pymunk.pygame_util
 import sys
 
 
@@ -41,6 +46,9 @@ class ApplicationGUI():
         self.top.geometry(str(WIDTH) + "x" + str(HEIGHT))
         self.top.resizable(0, 0)
         self.top.protocol("WM_DELETE_WINDOW", self.close)
+
+    def start_game(self):
+        self.game
 
     def run(self):
         while self.running:

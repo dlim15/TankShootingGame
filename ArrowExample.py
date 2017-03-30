@@ -2,7 +2,8 @@
 realistic looking way.
 """
 import sys
-
+import os
+from tkinter import *
 import pygame
 from pygame.locals import *
 from pygame.color import *
@@ -52,6 +53,12 @@ width, height = 690, 600
 
 
 def main():
+    root = Tk()
+    embed = Frame(root, width=width, height=height)  # creates embed frame for pygame window
+    embed.pack(side=LEFT)  # packs window to the left
+    os.environ['SDL_WINDOWID'] = str(embed.winfo_id())
+    os.environ['SDL_VIDEODRIVER'] = 'windib'
+
     ### PyGame init
     pygame.init()
     screen = pygame.display.set_mode((width, height))
@@ -177,6 +184,7 @@ def main():
         screen.blit(font.render("Press ESC or Q to quit", 1, THECOLORS["darkgrey"]), (5, height - 20))
 
         pygame.display.flip()
+        root.update()
 
         ### Update physics
         fps = 60
