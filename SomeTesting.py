@@ -1,48 +1,28 @@
 #!/usr/bin/python
-
+import pygame
+import tkinter as tk
 from tkinter import *
+import os
 
+root = tk.Tk()
+embed = tk.Frame(root, width = 500, height = 500) #creates embed frame for pygame window
+embed.grid(columnspan = (600), rowspan = 500) # Adds grid
+embed.pack(side = LEFT) #packs window to the left
+buttonwin = tk.Frame(root, width = 75, height = 500)
+buttonwin.pack(side = LEFT)
+os.environ['SDL_WINDOWID'] = str(embed.winfo_id())
+os.environ['SDL_VIDEODRIVER'] = 'windib'
+screen = pygame.display.set_mode((500,500))
+screen.fill(pygame.Color(255,255,255))
+pygame.display.init()
+pygame.display.update()
+def draw():
+    pygame.draw.circle(screen, (0,0,0), (250,250), 125)
+    pygame.display.update()
+button1 = Button(buttonwin,text = 'Draw',  command=draw)
+button1.pack(side=LEFT)
+root.update()
 
-
-def main():
-    WIDTH = 1000
-    HEIGHT = 1000
-    top = Tk()
-    top.geometry(str(WIDTH) + "x" + str(HEIGHT))
-    frame = Frame(top, width=WIDTH, height = HEIGHT)
-    frame.pack()
-
-    canvas = Canvas(frame, width = WIDTH, height = HEIGHT)
-    canvas.pack()
-
-    setUpMainMenu(top, canvas)
-    addKeyListenerToCanvas(canvas)
-    top.mainloop()
-
-def setUpMainMenu(top, canvas):
-    top.wm_title("Tank Shooting Game")
-    top.resizable(width=0, height=0)
-
-    var = "Hello"
-    lblName = Label(top, text=var, fg="black", bg="white")
-    lblName.pack()
-    lblName.place(x = 150, y = 50)
-
-    def btnBClicked():
-        lblName.config(text="Yolo!")
-
-    btnClick = Button(canvas, text="click", command=btnBClicked)
-    btnClick.place(x=150, y=100)
-
-def addKeyListenerToCanvas(canvas):
-    def leftKey(event):
-        print("left clicked")
-    def rightKey(event):
-        print("right clicked")
-    canvas.bind('<Left>',leftKey)
-    canvas.bind('<Right>',rightKey)
-    canvas.focus_set()
-
-
-if __name__ == "__main__":
-    main()
+while True:
+    pygame.display.update()
+    root.update()

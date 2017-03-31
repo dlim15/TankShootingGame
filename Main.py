@@ -11,17 +11,15 @@ from pymunk.vec2d import Vec2d
 import pymunk.pygame_util
 import sys
 
-
 class ApplicationGUI():
     def __init__(self, WIDTH, HEIGHT):
-        self.running = True
+        self.running = False
         self.frameRate = 60
-        self.clock = pygame.time.Clock()
         self.start_root(WIDTH, HEIGHT)
         self.create_widgets(MainMenu)
 
     def close(self):
-        self.running = False
+        self.end_gameplay()
         self.top.destroy()
 
     def create_widgets(self, menu):
@@ -47,19 +45,39 @@ class ApplicationGUI():
         self.top.resizable(0, 0)
         self.top.protocol("WM_DELETE_WINDOW", self.close)
 
-    def start_game(self):
-        self.game
+    def end_gameplay(self):
+        pygame.quit()
+        self.running = False
+        self.space = None
+
+
+    def start_game(self, WIDTH, HEIGHT):
+        #pygame
+        pygame.init()
+        self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
+        self.clock = pygame.time.Clock()
+
+        #pymunk
+        self.space = pymunk.Space()
+
+        #### TEMPORARY ####
+        self.screen.fill((255,255,255))
+        pygame.draw.circle(self.screen, (0, 0, 0), (250, 250), 125)
+        self.space.gravity = (0.0,-900.0)
+
 
     def run(self):
-        while self.running:
+        while True:
             fps = 60
             dt = 1. / fps
-            #space.step(dt) TODO
+            if self.running:
+                self.space.step(dt)
+                pygame.display.update()
 
             self.top.update_idletasks()
             self.top.update()
-
             self.clock.tick(fps)
+
 
 def main():
     WIDTH = 500

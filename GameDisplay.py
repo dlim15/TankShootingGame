@@ -1,6 +1,7 @@
 
 from tkinter import *
 from MenuDisplay import *
+import os
 
 class GameScreen(BaseMenuDisplay):
     def create_widgets(self):
@@ -19,25 +20,26 @@ class GameScreen(BaseMenuDisplay):
         self.quit.pack()
         self.quit.place(x=super().winfo_screenwidth()-39,y=0, width=35,height=30)
         self.addCanvas()
-        self.addTank()
-        self.addKeyListenerToCanvas()
+        self.top.start_game(self.canvas.winfo_screenwidth(),self.canvas.winfo_screenheight())
+        #self.addTank()
+        #self.addKeyListenerToCanvas()
 
     def backToMain(self):
         self.top.top.attributes("-fullscreen",False)
         self.top.show_frame(MainMenu)
 
-
-
     def addCanvas(self):
         self.canvas = Canvas(self.topFrame,width=super().winfo_screenwidth(), height=super().winfo_screenheight())
         self.canvas.pack(expand=1,fill=BOTH)
         self.canvas.place(x=0, y=30)
-        self.btnLeft = Button(self.canvas,text="<-", font=("Arial", 20, "bold"), command=self.moveLeft);
-        self.btnRight = Button(self.canvas,text="->", font=("Arial", 20, "bold"), command=self.moveRight);
-        self.btnLeft.pack()
-        self.btnRight.pack()
-        self.btnLeft.place(x=100,y=super().winfo_screenheight()*7/8, width=35,height=30)
-        self.btnRight.place(x=150,y=super().winfo_screenheight()*7/8, width=35,height=30)
+        os.environ['SDL_WINDOWID'] = str(self.canvas.winfo_id())
+        os.environ['SDL_VIDEODRIVER'] = 'windib'
+        # self.btnLeft = Button(self.canvas,text="<-", font=("Arial", 20, "bold"), command=self.moveLeft);
+        # self.btnRight = Button(self.canvas,text="->", font=("Arial", 20, "bold"), command=self.moveRight);
+        # self.btnLeft.pack()
+        # self.btnRight.pack()
+        # self.btnLeft.place(x=100,y=super().winfo_screenheight()*7/8, width=35,height=30)
+        # self.btnRight.place(x=150,y=super().winfo_screenheight()*7/8, width=35,height=30)
 
     def addTank(self):
         imgTank = PhotoImage(file="tank.gif")
