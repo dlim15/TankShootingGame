@@ -65,7 +65,7 @@ class LevelSelectMenu(BaseMenuDisplay):
         self.buttonFrame = Frame(self)
         self.buttonFrame.pack(fill=BOTH, expand=True)
 
-        self.level1Button = Button(self.buttonFrame, text = "Level 1", font=("Arial", 24, "bold"), command=self.playGame)
+        self.level1Button = Button(self.buttonFrame, text = "Level 1", font=("Arial", 24, "bold"), command=lambda:self.playGame(1))
         self.level1Button.grid(row = 0, padx = 10, pady=10)
 
         self.level2Button = Button(self.buttonFrame, text="Level 2",font=("Arial", 24, "bold"),  state=DISABLED)
@@ -92,6 +92,7 @@ class LevelSelectMenu(BaseMenuDisplay):
         self.level9Button = Button(self.buttonFrame, text="Level 9", font=("Arial", 24, "bold"), state=DISABLED)
         self.level9Button.grid(row=2, column=2, padx=10, pady=10)
 
-    def playGame(self):
+    def playGame(self, levelNum):
         self.top.top.attributes("-fullscreen",True)
         self.top.show_frame(GameScreen)
+        self.top.frames[GameScreen].start(levelNum)

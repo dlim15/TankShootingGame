@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+from GameClasses import *
 from tkinter import *
 from MenuDisplay import *
 from GameDisplay import *
@@ -14,6 +14,7 @@ import sys
 class ApplicationGUI():
     def __init__(self, WIDTH, HEIGHT):
         self.running = False
+        self.clock = pygame.time.Clock()
         self.frameRate = 60
         self.start_root(WIDTH, HEIGHT)
         self.create_widgets(MainMenu)
@@ -51,19 +52,22 @@ class ApplicationGUI():
         self.space = None
 
 
-    def start_game(self, WIDTH, HEIGHT):
+    def start_game(self, WIDTH, HEIGHT, level_to_play):
         #pygame
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
-        self.clock = pygame.time.Clock()
 
         #pymunk
         self.space = pymunk.Space()
 
         #### TEMPORARY ####
-        self.screen.fill((255,255,255))
-        pygame.draw.circle(self.screen, (0, 0, 0), (250, 250), 125)
-        self.space.gravity = (0.0,-900.0)
+        #Load levels
+        i = 1
+        for level in (Level, Level):
+            if i == level_to_play:
+                self.level=level(WIDTH,HEIGHT, self.space, self.screen)
+                break
+            i += 1
 
 
     def run(self):

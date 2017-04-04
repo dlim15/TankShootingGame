@@ -4,6 +4,9 @@ from MenuDisplay import *
 import os
 
 class GameScreen(BaseMenuDisplay):
+    def start(self, levelNum):
+        self.top.start_game(self.canvas.winfo_screenwidth(), self.canvas.winfo_screenheight(), levelNum)
+
     def create_widgets(self):
 
         self.topFrame = Frame(self)
@@ -20,7 +23,7 @@ class GameScreen(BaseMenuDisplay):
         self.quit.pack()
         self.quit.place(x=super().winfo_screenwidth()-39,y=0, width=35,height=30)
         self.addCanvas()
-        self.top.start_game(self.canvas.winfo_screenwidth(),self.canvas.winfo_screenheight())
+        #self.top.start_game(self.canvas.winfo_screenwidth(),self.canvas.winfo_screenheight())
         #self.addTank()
         #self.addKeyListenerToCanvas()
 
