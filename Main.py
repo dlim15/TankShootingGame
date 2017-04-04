@@ -59,6 +59,7 @@ class ApplicationGUI():
 
         #pymunk
         self.space = pymunk.Space()
+        self.draw_options = pymunk.pygame_util.DrawOptions(self.screen)
 
         #### TEMPORARY ####
         #Load levels
@@ -68,6 +69,7 @@ class ApplicationGUI():
                 self.level=level(WIDTH,HEIGHT, self.space, self.screen)
                 break
             i += 1
+        self.running = True
 
 
     def run(self):
@@ -76,7 +78,9 @@ class ApplicationGUI():
             dt = 1. / fps
             if self.running:
                 self.space.step(dt)
-                pygame.display.update()
+                self.screen.fill(pygame.color.THECOLORS["red"])
+                self.space.debug_draw(self.draw_options)
+                pygame.display.flip()
 
             self.top.update_idletasks()
             self.top.update()

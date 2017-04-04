@@ -8,10 +8,13 @@ class Level():
         #self.create_level(WIDTH, HEIGHT, space)
 
     def create_border_walls(self, WIDTH, HEIGHT, space):
-        self.walls = [pymunk.Segment(space.static_body, (0, 0), (0, WIDTH), 5)
-        , pymunk.Segment(space.static_body, (0, WIDTH), (HEIGHT, WIDTH), 5)
-        , pymunk.Segment(space.static_body, (HEIGHT, WIDTH), (HEIGHT, 0), 5)
-        , pymunk.Segment(space.static_body, (0, 0), (HEIGHT, 0), 5)]
+        self.walls = [pymunk.Segment(space.static_body, (0, 0), (0, HEIGHT), 5)
+        , pymunk.Segment(space.static_body, (0, HEIGHT), (WIDTH, HEIGHT), 5)
+        , pymunk.Segment(space.static_body, (WIDTH, HEIGHT), (WIDTH, 0), 5)
+        , pymunk.Segment(space.static_body, (0, 0), (WIDTH, 0), 5)]
+        b2 = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+        self.walls.append(pymunk.Circle(b2, 30))
+        b2.position = 300, 400
         for wall in self.walls:
             wall.friciton = 1.
             wall.group = 1
