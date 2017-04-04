@@ -93,7 +93,7 @@ class LevelSelectMenu(BaseMenuDisplay):
         self.level9Button.grid(row=2, column=2, padx=10, pady=10)
 
     def playGame(self, levelNum):
-        self.top.top.focus_set()
+        self.top.top.focus_force()
         self.top.top.attributes("-fullscreen",True)
         self.top.show_frame(GameScreen)
         self.top.frames[GameScreen].start(levelNum)

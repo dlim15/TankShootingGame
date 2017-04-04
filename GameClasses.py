@@ -16,7 +16,7 @@ class Level():
         self.walls.append(pymunk.Circle(b2, 30))
         b2.position = 300, 400
         for wall in self.walls:
-            wall.friciton = 1.
+            wall.friction = 1.
             wall.group = 1
         space.add(self.walls)
 
