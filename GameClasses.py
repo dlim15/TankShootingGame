@@ -5,16 +5,14 @@ class Level():
     def __init__(self, WIDTH, HEIGHT, space, display):
         self.create_border_walls(WIDTH, HEIGHT, space)
         self.setup_space(space, display)
-        #self.create_level(WIDTH, HEIGHT, space)
+        #self.create_level(WIDTH, HEIGHT, space, display)
 
     def create_border_walls(self, WIDTH, HEIGHT, space):
-        self.walls = [pymunk.Segment(space.static_body, (0, 0), (0, HEIGHT), 5)
-        , pymunk.Segment(space.static_body, (0, HEIGHT), (WIDTH, HEIGHT), 5)
-        , pymunk.Segment(space.static_body, (WIDTH, HEIGHT), (WIDTH, 0), 5)
-        , pymunk.Segment(space.static_body, (0, 0), (WIDTH, 0), 5)]
-        b2 = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
-        self.walls.append(pymunk.Circle(b2, 30))
-        b2.position = 300, 400
+        self.bottom = HEIGHT/10
+        self.walls = [pymunk.Segment(space.static_body, (0, self.bottom), (0, HEIGHT), 5)
+        , pymunk.Segment(space.static_body, (0, HEIGHT), (WIDTH, HEIGHT), 5)#Top
+        , pymunk.Segment(space.static_body, (WIDTH, HEIGHT), (WIDTH, self.bottom), 5)
+        , pymunk.Segment(space.static_body, (0, self.bottom), (WIDTH, self.bottom), 5)]#Bot
         for wall in self.walls:
             wall.friction = 1.
             wall.group = 1
@@ -25,5 +23,10 @@ class Level():
         space.gravity = (0.0,-900.0)
 
 
-    def create_level(self, WIDTH, HEIGHT):
+    def create_level(self, WIDTH, HEIGHT, space, display):
         raise NotImplementedError
+
+class Level1(Level):
+    def create_level(self, WIDTH, HEIGHT, space, display):
+        self.tank = Tank(x = 15, y= self.bottom)
+        self.target = Target(x= 300, y = 300)

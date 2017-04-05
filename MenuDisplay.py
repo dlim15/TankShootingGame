@@ -46,11 +46,11 @@ class PlayGameMenu(BaseMenuDisplay):
         self.buttonFrame = Frame(self)
         self.buttonFrame.pack(fill=BOTH, expand=True)
 
-        self.levelsButton = Button(self.buttonFrame, text="Levels", command = lambda: self.top.show_frame(LevelSelectMenu))
-        self.levelsButton.pack(side=LEFT,fill=BOTH, expand = True)
+        self.levelsButton = Button(self.buttonFrame, text="Levels",  font=("Arial", 24, "bold"), bd=5, command = lambda: self.top.show_frame(LevelSelectMenu))
+        self.levelsButton.pack(side=LEFT,fill=BOTH, expand = True, padx = 10, pady=10)
 
-        self.sandboxButton = Button(self.buttonFrame, text="Sandbox",state=DISABLED)
-        self.sandboxButton.pack(side = RIGHT,fill=BOTH, expand = True)
+        self.sandboxButton = Button(self.buttonFrame, text="Sandbox", font=("Arial", 24, "bold"), bd= 5, state=DISABLED)
+        self.sandboxButton.pack(side = RIGHT,fill=BOTH, expand = True, padx = 10, pady=10)
 
 class LevelSelectMenu(BaseMenuDisplay):
     def create_widgets(self):
@@ -94,6 +94,6 @@ class LevelSelectMenu(BaseMenuDisplay):
 
     def playGame(self, levelNum):
         self.top.top.focus_force()
-        self.top.top.attributes("-fullscreen",True)
+        self.top.top.wm_attributes("-fullscreen",True)
         self.top.show_frame(GameScreen)
         self.top.frames[GameScreen].start(levelNum)
