@@ -51,13 +51,31 @@ def post_solve_arrow_hit(arbiter, space, data):
 
 width, height = 690, 600
 
+class testFrame(Frame):
+    def __init__(self, masterFrame):
+        Frame.__init__(self, masterFrame)
+
+class testFrame2(testFrame):
+    def __init__(self, masterFrame):
+        testFrame.__init__(self, masterFrame)
 
 def main():
     root = Tk()
-    embed = Frame(root, width=width, height=height)  # creates embed frame for pygame window
-    embed.pack(side=LEFT)  # packs window to the left
-    os.environ['SDL_WINDOWID'] = str(embed.winfo_id())
+    root.rowconfigure(0, weight=1)
+    root.columnconfigure(0, weight=1)
+    root.wm_title("Tank Shooting Game")
+    root.geometry(str(width) + "x" + str(height))
+    root.resizable(0, 0)
+    embed = Frame(root)  # creates embed frame for pygame window
+    embed.pack(side="top", fill="both", expand=True)
+    embed.rowconfigure(0,weight=1)
+    embed.columnconfigure(0,weight=1)
+    embed2 = testFrame2(embed)  # creates embed frame for pygame window
+
+    os.environ['SDL_WINDOWID'] = str(embed2.winfo_id())
     os.environ['SDL_VIDEODRIVER'] = 'windib'
+    embed2.grid(row=0, column=0, sticky=N + W + S + E)  # packs window to the left
+    embed2.lift()
 
     ### PyGame init
     pygame.init()
@@ -167,7 +185,7 @@ def main():
 
         ### Draw stuff
         space.debug_draw(draw_options)
-        # draw(screen, space)
+        #pymunk.pygame_util.draw(screen, space)
 
         # Power meter
         if pygame.mouse.get_pressed()[0]:

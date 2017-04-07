@@ -1,10 +1,10 @@
 from tkinter import *
 
-class BaseMenuDisplay(Frame):
+class BaseMenuDisplay():
     def __init__(self, masterFrame, top):
-        Frame.__init__(self, masterFrame)
+        self.frame = Frame(masterFrame)
         self.top = top
-        self.grid()
+        self.frame.grid()
         self.create_widgets()
 
     def create_widgets(self):
@@ -13,13 +13,13 @@ class BaseMenuDisplay(Frame):
 
 class MainMenu(BaseMenuDisplay):
     def create_widgets(self):
-        self.topFrame = Frame(self, height = 200, pady = 25)
+        self.topFrame = Frame(self.frame, height = 200, pady = 25)
         self.topFrame.pack(side=TOP,fill=X)
 
         self.title = Label(self.topFrame,anchor = N, text = "Tank Shooting Game", font = ("Arial", 24, "bold"))
         self.title.pack(fill=BOTH)
 
-        self.buttonFrame = Frame(self)
+        self.buttonFrame = Frame(self.frame)
         self.buttonFrame.pack(fill = BOTH, expand = True)
 
         self.playButton = Button(self.buttonFrame, anchor = N, text = " Play Game ", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(PlayGameMenu), pady = 5)
@@ -35,7 +35,7 @@ from GameDisplay import *
 
 class PlayGameMenu(BaseMenuDisplay):
     def create_widgets(self):
-        self.topFrame = Frame(self)
+        self.topFrame = Frame(self.frame)
         self.topFrame.pack(side=TOP,fill=X)
 
         self.title = Label(self.topFrame, text="Play Game", font=("Arial", 24, "bold"))
@@ -43,7 +43,7 @@ class PlayGameMenu(BaseMenuDisplay):
         self.back = Button(self.topFrame,anchor=E, text="Back", command = lambda: self.top.show_frame(MainMenu))
         self.back.pack(side=RIGHT,fill=Y)
 
-        self.buttonFrame = Frame(self)
+        self.buttonFrame = Frame(self.frame)
         self.buttonFrame.pack(fill=BOTH, expand=True)
 
         self.levelsButton = Button(self.buttonFrame, text="Levels",  font=("Arial", 24, "bold"), bd=5, command = lambda: self.top.show_frame(LevelSelectMenu))
@@ -54,7 +54,7 @@ class PlayGameMenu(BaseMenuDisplay):
 
 class LevelSelectMenu(BaseMenuDisplay):
     def create_widgets(self):
-        self.topFrame = Frame(self)
+        self.topFrame = Frame(self.frame)
         self.topFrame.pack(side=TOP, fill=X)
 
         self.title = Label(self.topFrame, text="Level Select", font=("Arial", 24, "bold"))
@@ -62,7 +62,7 @@ class LevelSelectMenu(BaseMenuDisplay):
         self.back = Button(self.topFrame, anchor=E, text="Back", command=lambda: self.top.show_frame(PlayGameMenu))
         self.back.pack(side=RIGHT, fill=Y)
 
-        self.buttonFrame = Frame(self)
+        self.buttonFrame = Frame(self.frame)
         self.buttonFrame.pack(fill=BOTH, expand=True)
 
         self.level1Button = Button(self.buttonFrame, text = "Level 1", font=("Arial", 24, "bold"), command=lambda:self.playGame(1))
@@ -93,7 +93,6 @@ class LevelSelectMenu(BaseMenuDisplay):
         self.level9Button.grid(row=2, column=2, padx=10, pady=10)
 
     def playGame(self, levelNum):
-        self.top.top.focus_force()
         self.top.top.wm_attributes("-fullscreen",True)
         self.top.show_frame(GameScreen)
         self.top.frames[GameScreen].start(levelNum)
