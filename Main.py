@@ -51,7 +51,7 @@ class ApplicationGUI():
         self.master.rowconfigure(0,weight=1)
         self.master.columnconfigure(0,weight=1)
         self.frames = {}
-        for f in (MainMenu, PlayGameMenu, LevelSelectMenu, GameScreen):
+        for f in (MainMenu, PlayGameMenu, LevelSelectMenu, InstructionsMenu, GameScreen):
             frame = f(self.master, self)
             frame.frame.grid(row=0, column=0, sticky=N+W+S+E)
             self.frames[f] = frame
