@@ -45,12 +45,12 @@ class Tank():
         self.wheel1_body = pymunk.Body(self.mass, self.moment)
         self.wheel1_object = pymunk.Circle(self.wheel1_body, self.wheel_radius)
         self.wheel1_object.friction = 1.5
-        self.wheel1_object.filter = pymunk.ShapeFilter(categories=1)
+        self.wheel1_object.filter = pymunk.ShapeFilter(categories=1, mask=2)
         space.add(self.wheel1_body, self.wheel1_object)
         self.wheel2_body = pymunk.Body(self.mass, self.moment)
         self.wheel2_object = pymunk.Circle(self.wheel2_body, self.wheel_radius)
         self.wheel2_object.friction = 1.5
-        self.wheel2_object.filter = pymunk.ShapeFilter(categories=1)
+        self.wheel2_object.filter = pymunk.ShapeFilter(categories=1, mask=2)
         space.add(self.wheel2_body, self.wheel2_object)
 
     def create_cannon(self, space):
@@ -60,8 +60,8 @@ class Tank():
         self.turret_body = pymunk.Body(self.mass, self.cannon_moment)
         self.turret = pymunk.Circle(self.turret_body, self.cannon_radius)
         self.cannon_obj = pymunk.Poly.create_box(self.cannon_body, self.cannon_size)
-        self.turret.filter = pymunk.ShapeFilter(categories=1)
-        self.cannon_obj.filter = pymunk.ShapeFilter(categories=1)
+        self.turret.filter = pymunk.ShapeFilter(categories=1, mask=2)
+        self.cannon_obj.filter = pymunk.ShapeFilter(categories=1, mask=2)
         space.add(self.cannon_body, self.turret_body, self.turret, self.cannon_obj)
         #space.add(self.turret_body, self.turret)
 
@@ -70,7 +70,7 @@ class Tank():
         self.moment_body = pymunk.moment_for_box(self.mass, self.size)
         self.chassi_body = pymunk.Body(self.mass, self.moment_body)
         self.chassi_obj = pymunk.Poly.create_box(self.chassi_body, self.size)
-        self.chassi_obj.filter = pymunk.ShapeFilter(categories=1)
+        self.chassi_obj.filter = pymunk.ShapeFilter(categories=1, mask=2)
         space.add(self.chassi_body, self.chassi_obj)
 
     def set_positions(self):
