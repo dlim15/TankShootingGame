@@ -82,7 +82,7 @@ class Tank():
 
 
     def get_cannon_body_position(self):
-        return self.turret_body.position + Vec2d(self.cannon_size).rotated(self.turret_body.angle)
+        return self.turret_body.position + Vec2d((self.cannon_size[0]/2,0)).rotated(self.turret_body.angle)
 
     def create_joints(self, space):
         self.joints = [
