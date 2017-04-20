@@ -109,7 +109,7 @@ class ApplicationGUI():
                 for event in pygame.event.get():
                     if event.type == QUIT or \
                                             event.type == KEYDOWN and (event.key in [K_ESCAPE, K_q]):
-                        running = False
+                        self.running = False
                     elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                         start_time = pygame.time.get_ticks()
                     elif event.type == KEYDOWN and event.key == K_p:
@@ -125,15 +125,17 @@ class ApplicationGUI():
 
                 keys = pygame.key.get_pressed()
 
-                speed = 2.5
+                speed = 4
                 #if (keys[K_UP]):
                 #    cannon_body.position += Vec2d(0, 1) * speed
                 #if (keys[K_DOWN]):
                 #    cannon_body.position += Vec2d(0, -1) * speed
                 if (keys[K_LEFT]):
-                    self.level.moveTank(Vec2d(-1, 0) * speed)
-                if (keys[K_RIGHT]):
-                    self.level.moveTank(Vec2d(1, 0) * speed)
+                    self.level.moveTank(1 * speed)
+                elif (keys[K_RIGHT]):
+                    self.level.moveTank(-1 * speed)
+                else:
+                    self.level.moveTank(0)
 
                 self.level.update_level(self.get_mouse_pos())
                 for flying_arrow in self.flying_arrows:

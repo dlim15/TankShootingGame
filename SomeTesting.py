@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import pygame
 import pymunk
+from pymunk import Vec2d
 import pymunk.pygame_util
 import tkinter as tk
 from tkinter import *
@@ -17,34 +18,69 @@ os.environ['SDL_VIDEODRIVER'] = 'windib'
 screen = pygame.display.set_mode((500,500))
 #screen.fill(pygame.Color(255,255,255))
 pygame.display.init()
+pymunk.pygame_util.positive_y_is_up = False
 pygame.display.update()
 space = pymunk.Space()
 draw_options = pymunk.pygame_util.DrawOptions(screen)
-space.gravity = (0.0,-900.0)
+space.gravity = (0.0,900.0)
 
-wall = pymunk.Segment(space.static_body, (0, 0), (500, 0), 50)
+wall = pymunk.Segment(space.static_body, (0, 500), (500,500), 50)
 wall.friction = 1
 space.add(wall)
 
 #Attempt to build car
-x,y = 100,100
-xOff, yOff = 10,10
-body = pymunk.Body(1,1)  # Create a Body with mass and moment
-body.position = x,y     # Set the position of the body
-wheel1Body = pymunk.Body(body_type = pymunk.Body.KINEMATIC)  # Create a Body with mass and moment
-wheel1Body.position = x+xOff,y+yOff     # Set the position of the body
-wheel2Body = pymunk.Body(body_type = pymunk.Body.KINEMATIC)  # Create a Body with mass and moment
-wheel2Body.position = x-xOff,y-yOff     # Set the position of the body
+pos = Vec2d(100,200)
 
-poly = pymunk.Segment(body,(-10,0),(10,0), 10) # Create a box shape and attach to body
-wheel1 = pymunk.Circle(body,10,(xOff,-1*yOff))
-wheel1.friction = 0.01
-wheel1Joint = pymunk.GrooveJoint(body, wheel1Body, (0,0),(x,y),(x+xOff,y-yOff))
-wheel2 = pymunk.Circle(body,10,(-1*xOff,-1*yOff))
-wheel2.friction = 0.01
-wheel2Joint = pymunk.GrooveJoint(body, wheel2Body, (0,0),(x,y),(x+xOff,y-yOff))
-space.add(body, poly, wheel1, wheel2, wheel1Joint, wheel2Joint)       # Add both body and shape to the simulation
+wheel_color = 52,219,119
+wheel2_color = 52,219,119
+shovel_color = 219,119,52
+mass = 100
+radius = 25
+moment = pymunk.moment_for_circle(mass, 20, radius)
+wheel1_b = pymunk.Body(mass, moment)
+wheel1_s = pymunk.Circle(wheel1_b, radius)
+wheel1_s.friction = 1.5
+#wheel1_s.color = wheel_color
+space.add(wheel1_b, wheel1_s)
 
+mass = 100
+radius = 25
+moment = pymunk.moment_for_circle(mass, 20, radius)
+wheel2_b = pymunk.Body(mass, moment)
+wheel2_s = pymunk.Circle(wheel2_b, radius)
+wheel2_s.friction = 1.5
+#wheel2_s.color = wheel2_color
+space.add(wheel2_b, wheel2_s)
+
+mass = 100
+size = (50,30)
+moment = pymunk.moment_for_box(mass, size)
+chassi_b = pymunk.Body(mass, moment)
+chassi_s = pymunk.Poly.create_box(chassi_b, size)
+space.add(chassi_b, chassi_s)
+
+vs = [(0,0),(25,45),(0,45)]
+shovel_s = pymunk.Poly(chassi_b, vs, transform = pymunk.Transform(tx=85))
+shovel_s.friction = 0.5
+shovel_s.color = shovel_color
+space.add(shovel_s)
+
+wheel1_b.position = pos - (55,0)
+wheel2_b.position = pos + (55,0)
+chassi_b.position = pos + (0,-25)
+
+space.add(
+    pymunk.PinJoint(wheel1_b, chassi_b, (0,0), (-25,-15)),
+    pymunk.PinJoint(wheel1_b, chassi_b, (0,0), (-25, 15)),
+    pymunk.PinJoint(wheel2_b, chassi_b, (0,0), (25,-15)),
+    pymunk.PinJoint(wheel2_b, chassi_b, (0,0), (25, 15))
+    )
+speed = 4
+motors = [pymunk.SimpleMotor(wheel1_b, chassi_b, 0),
+    pymunk.SimpleMotor(wheel2_b, chassi_b, 0)]
+space.add(
+    motors[0], motors[1]
+)
 ch = space.add_collision_handler(0, 0)
 ch.data["surface"] = screen
 
@@ -58,11 +94,14 @@ root.update()
 while True:
     pressed = pygame.key.get_pressed()
     if pressed[pygame.K_d]:
-        body.apply_force_at_local_point((0,-100),(0,0))
-    if pressed[pygame.K_a]:
-        body.apply_force_at_local_point((0,100),(0,0))
-    if pressed[pygame.K_s]:
-        body.apply_force_at_local_point((0,0),(0,0))
+        motors[0].rate = speed
+        motors[1].rate = speed
+    elif pressed[pygame.K_a]:
+        motors[0].rate = -1*speed
+        motors[1].rate = -1*speed
+    else:
+        motors[0].rate = 0
+        motors[1].rate = 0
 
     fps = 30
     dt = 1. / fps
