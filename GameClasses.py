@@ -18,8 +18,8 @@ class Tank():
         # self.body.position = 100,HEIGHT/5 + 28
         # space.add(self.shape)
 
-        self.arrow_body, self.arrow_shape = self.create_arrow()
-        space.add(self.arrow_shape)
+        #self.arrow_body, self.arrow_shape = self.create_arrow()
+        #space.add(self.arrow_shape)
 
     def create_tank(self, space):
         self.mass = 100
@@ -96,18 +96,16 @@ class Tank():
             space.add(joint)
 
     def get_arrow_angle(self):
-        return self.arrow_body.angle
+        return self.turret_body.angle
 
     def fire_arrow(self, space, flying_arrows, impulse):
+        self.arrow_body, self.arrow_shape = self.create_arrow()
+        space.add(self.arrow_shape)
         self.arrow_body.apply_impulse_at_world_point(impulse, self.arrow_body.position)
 
         space.add(self.arrow_body)
 
-        temp_body = self.arrow_body
-
-        self.arrow_body, self.arrow_shape = self.create_arrow()
-        space.add(self.arrow_shape)
-        return temp_body
+        return self.arrow_body
 
     def update_angle(self, space, mouse_pos):
         # Update cannon angle
@@ -128,6 +126,9 @@ class Tank():
         arrow_shape = pymunk.Poly(arrow_body, vs)
         arrow_shape.friction = .5
         arrow_shape.collision_type = 1
+        arrow_shape.filter = pymunk.ShapeFilter(categories = 3, mask = 2)
+        arrow_body.position = self.get_cannon_body_position() + (10,10)
+        arrow_body.angle = self.get_arrow_angle()
         return arrow_body, arrow_shape
 
 class Level():
