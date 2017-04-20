@@ -137,7 +137,7 @@ class ApplicationGUI():
                 else:
                     self.level.moveTank(0)
 
-                self.level.update_level(self.get_mouse_pos())
+                self.level.update_level(self.space, self.get_mouse_pos())
                 for flying_arrow in self.flying_arrows:
                     drag_constant = 0.0002
 
@@ -154,7 +154,7 @@ class ApplicationGUI():
                                                               arrow_tail_position)
 
                     flying_arrow.angular_velocity *= 0.5
-                self.screen.fill(pygame.color.THECOLORS["black"])
+                self.screen.fill(pygame.color.THECOLORS["blue"])
                 self.space.debug_draw(self.draw_options)
                 if pygame.mouse.get_pressed()[0]:
                     current_time = pygame.time.get_ticks()

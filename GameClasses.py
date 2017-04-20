@@ -8,7 +8,7 @@ class Tank():
         self.start_pos = position
         self.wheel_offset = (20, 0)
         self.chassi_offset = (0, 13)
-        self.turret_offset = (0, 30)
+        self.turret_offset = (0, 32.5)
         self.cannon_offset = (15, 22)
         self.create_tank(space)
         # self.body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
@@ -45,10 +45,12 @@ class Tank():
         self.wheel1_body = pymunk.Body(self.mass, self.moment)
         self.wheel1_object = pymunk.Circle(self.wheel1_body, self.wheel_radius)
         self.wheel1_object.friction = 1.5
+        self.wheel1_object.filter = pymunk.ShapeFilter(categories=1)
         space.add(self.wheel1_body, self.wheel1_object)
         self.wheel2_body = pymunk.Body(self.mass, self.moment)
         self.wheel2_object = pymunk.Circle(self.wheel2_body, self.wheel_radius)
         self.wheel2_object.friction = 1.5
+        self.wheel2_object.filter = pymunk.ShapeFilter(categories=1)
         space.add(self.wheel2_body, self.wheel2_object)
 
     def create_cannon(self, space):
@@ -58,6 +60,8 @@ class Tank():
         self.turret_body = pymunk.Body(self.mass, self.cannon_moment)
         self.turret = pymunk.Circle(self.turret_body, self.cannon_radius)
         self.cannon_obj = pymunk.Poly.create_box(self.cannon_body, self.cannon_size)
+        self.turret.filter = pymunk.ShapeFilter(categories=1)
+        self.cannon_obj.filter = pymunk.ShapeFilter(categories=1)
         space.add(self.cannon_body, self.turret_body, self.turret, self.cannon_obj)
         #space.add(self.turret_body, self.turret)
 
@@ -66,14 +70,19 @@ class Tank():
         self.moment_body = pymunk.moment_for_box(self.mass, self.size)
         self.chassi_body = pymunk.Body(self.mass, self.moment_body)
         self.chassi_obj = pymunk.Poly.create_box(self.chassi_body, self.size)
+        self.chassi_obj.filter = pymunk.ShapeFilter(categories=1)
         space.add(self.chassi_body, self.chassi_obj)
 
     def set_positions(self):
         self.wheel1_body.position = self.start_pos - self.wheel_offset
         self.wheel2_body.position = self.start_pos + self.wheel_offset
         self.chassi_body.position = self.start_pos + self.chassi_offset
-        self.cannon_body.position = self.start_pos + self.cannon_offset
         self.turret_body.position = self.start_pos + self.turret_offset
+        self.cannon_body.position = self.get_cannon_body_position()
+
+
+    def get_cannon_body_position(self):
+        return self.turret_body.position + Vec2d(self.cannon_size).rotated(self.turret_body.angle)
 
     def create_joints(self, space):
         self.joints = [
@@ -100,9 +109,12 @@ class Tank():
         space.add(self.arrow_shape)
         return temp_body
 
-    def update_angle(self, mouse_pos):
+    def update_angle(self, space, mouse_pos):
         # Update cannon angle
-        self.body = None
+        self.turret_body.angle = (mouse_pos - self.turret_body.position).angle
+        self.cannon_body.position = self.get_cannon_body_position()
+        self.cannon_body.angle = self.turret_body.angle
+        space.reindex_shapes_for_body(self.cannon_body)
         # self.body.angle = (mouse_pos - self.body.position).angle
         # self.arrow_body.position = self.body.position + Vec2d(self.shape.radius + 40, 0).rotated(self.body.angle)
         # self.arrow_body.angle = self.body.angle
@@ -139,7 +151,7 @@ class Level():
         space.add(self.walls)
 
     def setup_space(self, space, display):
-        display.fill((255,255,255))
+        display.fill((135,206,250))
         space.gravity = (0.0,-900.0)
 
     def moveTank(self, speed):
@@ -154,5 +166,5 @@ class Level1(Level):
         print()
         #self.target = Target(x= 300, y = 300)
 
-    def update_level(self, mouse_pos):
-        self.tank.update_angle(mouse_pos)
+    def update_level(self, space, mouse_pos):
+        self.tank.update_angle(space, mouse_pos)
