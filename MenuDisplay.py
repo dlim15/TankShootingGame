@@ -59,7 +59,7 @@ class InstructionsMenu(BaseMenuDisplay):
 
         self.title = Label(self.topFrame,bg="blue",foreground="white", text="  Instructions", font=("Arial", 24, "bold"))
         self.title.pack(side=LEFT)
-        self.back = Button(self.topFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white",  font=("Arial", 12, "bold"),anchor=E, text="Back", command = lambda: self.top.show_frame(LevelSelectMenu))
+        self.back = Button(self.topFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white",  font=("Arial", 12, "bold"),anchor=E, text="Back", command = lambda: self.top.show_frame(MainMenu))
         self.back.pack(side=RIGHT,fill=Y)
 
         self.outerFrame = Frame(self.frame,bg = "blue",bd = 20,relief ="sunken")

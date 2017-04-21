@@ -11,6 +11,13 @@ from pymunk.vec2d import Vec2d
 import pymunk.pygame_util
 import sys
 
+#    Tank             Target
+levelInfo = [
+    (Vec2d(100, 200), Vec2d(1000,175)),
+    (Vec2d(100, 200), Vec2d(1300,175)),
+    (Vec2d(100, 200), Vec2d(1000,600))
+]
+
 def stick_arrow_to_target(space, arrow_body, target_body, position, flying_arrows):
     pivot_joint = pymunk.PivotJoint(arrow_body, target_body, position)
     phase = target_body.angle - arrow_body.angle
@@ -22,9 +29,10 @@ def stick_arrow_to_target(space, arrow_body, target_body, position, flying_arrow
     except:
         pass
 
-def remove_arrow(space, a, arrow_body, b, other_body, flying_arrows):
+def remove_arrow(space, self, a, arrow_body, b, other_body, flying_arrows):
     if b.group == 3:
         #end level
+        ApplicationGUI.beat_current_level(self)
         space.remove(other_body, b)
     try:
         flying_arrows.remove(arrow_body)
@@ -41,7 +49,8 @@ def post_solve_arrow_hit(arbiter, space, data):
         other_body = a.body
         arrow_body = b.body
         space.add_post_step_callback(
-            remove_arrow, b, arrow_body, a, other_body, data["flying_arrows"])
+        #    stick_arrow_to_target, arrow_body, other_body, position, data["flying_arrows"])
+            remove_arrow, data["self"], b, arrow_body, a, other_body, data["flying_arrows"])
 
 class ApplicationGUI():
     def __init__(self, WIDTH, HEIGHT):
@@ -85,11 +94,25 @@ class ApplicationGUI():
         self.running = False
         self.space = None
 
+    def beat_current_level(self):
+        if self.current_level == 1:
+            self.frames[LevelSelectMenu].level2Button.config(state = NORMAL, command=lambda:self.frames[LevelSelectMenu].playGame(2))
+        elif self.current_level ==2:
+            self.frames[LevelSelectMenu].level3Button.config(state=NORMAL, command=lambda: self.frames[LevelSelectMenu].playGame(3))
+
+        self.screen.blit(pygame.font.SysFont("Arial", 64).render("COMPLETED", 1, THECOLORS["green"]), (self.w*1.3, self.h/2))
+        pygame.display.flip()
+        #Then Wait for a time displaying a victory message then go back to Level Select
+        pygame.time.wait(5000)
+        self.top.attributes("-fullscreen",False)
+        self.running = False
+        self.show_frame(LevelSelectMenu)
 
     def start_game(self, WIDTH, HEIGHT, level_to_play):
         #pygame
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
+        self.current_level = level_to_play
 
         #pymunk
         self.space = pymunk.Space()
@@ -97,6 +120,7 @@ class ApplicationGUI():
         self.draw_options = pymunk.pygame_util.DrawOptions(self.screen)
         self.handler = self.space.add_collision_handler(0,1)
         self.handler.data["flying_arrows"] = self.flying_arrows
+        self.handler.data["self"] = self
         self.handler.post_solve = post_solve_arrow_hit
 
         self.handler = self.space.add_collision_handler(0,3)
@@ -105,9 +129,10 @@ class ApplicationGUI():
         #### TEMPORARY ####
         #Load levels
         i = 1
-        for level in (Level1, Level1):
+        for level in (Level1, Level2, Level3):
             if i == level_to_play:
-                self.level=level(WIDTH,HEIGHT, self.space, self.screen)
+                tank_pos, tar_pos = levelInfo[level_to_play-1]
+                self.level=level(WIDTH,HEIGHT, self.space, self.screen, tank_pos=tank_pos,target_pos=tar_pos)
                 break
             i += 1
         self.running = True
@@ -158,7 +183,7 @@ class ApplicationGUI():
                 else:
                     self.level.moveTank(0)
 
-                self.level.update_level(self.space, self.screen, self.get_mouse_pos())
+                self.level.update_level(self.space,self.get_mouse_pos())
                 for flying_arrow in self.flying_arrows:
                     drag_constant = 0.0002
 
@@ -169,7 +194,7 @@ class ApplicationGUI():
                     # (1-abs(dot)) can be replaced with (1-dot) to make arrows turn
                     # around even when fired straight up. Might not be as accurate, but
                     # maybe look better.
-                    drag_force_magnitude = (1 - abs(dot)) * flight_speed ** 2 * drag_constant * flying_arrow.mass
+                    drag_force_magnitude = (1 - dot) * flight_speed ** 2 * drag_constant * flying_arrow.mass
                     arrow_tail_position = Vec2d(-50, 0).rotated(flying_arrow.angle)
                     flying_arrow.apply_impulse_at_world_point(drag_force_magnitude * -flight_direction,
                                                               arrow_tail_position)
@@ -191,7 +216,7 @@ class ApplicationGUI():
 
                 if not firstClick:
                     self.screen.blit(pygame.font.SysFont("Arial", 46).render("CLICK TO BEGIN", 1,
-                                                                             THECOLORS["black"]), (self.w/2, self.h/2))
+                                                                             THECOLORS["black"]), (self.w*1.3, self.h/2))
                 pygame.display.flip()
                 self.space.step(dt)
             else:

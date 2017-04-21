@@ -149,15 +149,14 @@ class Tank():
         return arrow_body, arrow_shape
 
 class Level():
-    def __init__(self, WIDTH, HEIGHT, space, display):
+    def __init__(self, WIDTH, HEIGHT, space, display, tank_pos, target_pos):
         self.w = WIDTH
         self.h = HEIGHT
         self.create_border_walls(WIDTH, HEIGHT, space)
         self.setup_space(space, display)
         self.create_level(WIDTH, HEIGHT, space, display)
-        self.tank = Tank(space, Vec2d(100, HEIGHT/5))
-        #self.target = Target(space, Vec2d(WIDTH-100, HEIGHT/5))
-        self.target = Target(space, Vec2d(400, HEIGHT / 5))
+        self.tank = Tank(space, tank_pos)
+        self.target = Target(space, target_pos)
 
     def create_border_walls(self, WIDTH, HEIGHT, space):
         self.bottom = HEIGHT/10
@@ -183,22 +182,37 @@ class Level():
     def create_level(self, WIDTH, HEIGHT, space, display):
         raise NotImplementedError
 
-    def update_level(self, space, screen, mouse_pos):
-        raise NotImplementedError
+    def update_level(self, space, mouse_pos):
+        self.tank.update_angle(space, mouse_pos)
 
     def write_to_screen(self, screen):
         raise NotImplementedError
 
 class Level1(Level):
     def create_level(self, WIDTH, HEIGHT, space, display):
-        print()
-        #self.target = Target(x= 300, y = 300)
-
-    def update_level(self, space, screen, mouse_pos):
-        self.tank.update_angle(space, mouse_pos)
-
+        pass
     def write_to_screen(self, screen):
         tar_pos = self.target.target_body.position
         tank_pos = self.tank.chassi_body.position
         screen.blit(pygame.font.SysFont("Arial", 22).render("LEFT and RIGHT arrow keys to move!", 1, THECOLORS["black"]), (tank_pos[0]-85,self.h - tank_pos[1]+60))
         screen.blit(pygame.font.SysFont("Arial", 22).render("^HIT THIS^", 1, THECOLORS["black"]), (tar_pos[0]-42,self.h - tar_pos[1]+self.target.radius))
+        screen.blit(pygame.font.SysFont("Arial", 22).render("Aim with mouse, hold LMB to powerup, release to fire", 1, THECOLORS["black"]),
+                    (10, 250))
+
+class Level2(Level):
+    def create_level(self, WIDTH, HEIGHT, space, display):
+        self.wall_body = pymunk.Body(1000, 5, pymunk.Body.STATIC)
+        self.wall = pymunk.Poly.create_box(self.wall_body, (150, 4*HEIGHT/8))
+        self.wall_body.position = (WIDTH/2, 350)
+        #wall = pymunk.Segment(space.static_body, (WIDTH/2, 5*HEIGHT/8), (WIDTH/2, 0), 150)
+        self.wall.group = 1
+        self.wall.friction = 1.
+        space.add(self.wall_body, self.wall)
+    def write_to_screen(self, screen):
+        pass
+
+class Level3(Level):
+    def create_level(self, WIDTH, HEIGHT, space, display):
+        pass
+    def write_to_screen(self, screen):
+        pass
