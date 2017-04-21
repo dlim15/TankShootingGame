@@ -22,7 +22,7 @@ class MainMenu(BaseMenuDisplay):
         self.buttonFrame = Frame(self.frame,bg = "black")
         self.buttonFrame.pack(fill = BOTH, expand = True)
 
-        self.playButton = Button(self.buttonFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white", anchor = N, text = " Play Game ", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(PlayGameMenu))
+        self.playButton = Button(self.buttonFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white", anchor = N, text = " Play Game ", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(LevelSelectMenu))
         self.playButton.pack(padx = 10,pady = 10)
 
         self.instructionsButton = Button(self.buttonFrame,bg = "blue",relief = "groove", bd = 10, foreground = "white", text = "Instructions", font=("Arial",24,"bold"), command = lambda: self.top.show_frame(InstructionsMenu))
@@ -59,7 +59,7 @@ class InstructionsMenu(BaseMenuDisplay):
 
         self.title = Label(self.topFrame,bg="blue",foreground="white", text="  Instructions", font=("Arial", 24, "bold"))
         self.title.pack(side=LEFT)
-        self.back = Button(self.topFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white",  font=("Arial", 12, "bold"),anchor=E, text="Back", command = lambda: self.top.show_frame(MainMenu))
+        self.back = Button(self.topFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white",  font=("Arial", 12, "bold"),anchor=E, text="Back", command = lambda: self.top.show_frame(LevelSelectMenu))
         self.back.pack(side=RIGHT,fill=Y)
 
         self.outerFrame = Frame(self.frame,bg = "blue",bd = 20,relief ="sunken")
@@ -80,7 +80,7 @@ class LevelSelectMenu(BaseMenuDisplay):
 
         self.title = Label(self.topFrame,bg="blue",foreground = "white", text="  Level Select", font=("Arial", 24, "bold"))
         self.title.pack(side=LEFT, fill=Y)
-        self.back = Button(self.topFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white",  font=("Arial", 12, "bold"), anchor=E, text="Back", command=lambda: self.top.show_frame(PlayGameMenu))
+        self.back = Button(self.topFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white",  font=("Arial", 12, "bold"), anchor=E, text="Back", command=lambda: self.top.show_frame(MainMenu))
         self.back.pack(side=RIGHT, fill=Y)
 
         self.buttonFrame = Frame(self.frame,bg = "black")
