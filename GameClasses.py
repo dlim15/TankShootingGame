@@ -150,6 +150,8 @@ class Tank():
 
 class Level():
     def __init__(self, WIDTH, HEIGHT, space, display):
+        self.w = WIDTH
+        self.h = HEIGHT
         self.create_border_walls(WIDTH, HEIGHT, space)
         self.setup_space(space, display)
         self.create_level(WIDTH, HEIGHT, space, display)
@@ -181,10 +183,22 @@ class Level():
     def create_level(self, WIDTH, HEIGHT, space, display):
         raise NotImplementedError
 
+    def update_level(self, space, screen, mouse_pos):
+        raise NotImplementedError
+
+    def write_to_screen(self, screen):
+        raise NotImplementedError
+
 class Level1(Level):
     def create_level(self, WIDTH, HEIGHT, space, display):
         print()
         #self.target = Target(x= 300, y = 300)
 
-    def update_level(self, space, mouse_pos):
+    def update_level(self, space, screen, mouse_pos):
         self.tank.update_angle(space, mouse_pos)
+
+    def write_to_screen(self, screen):
+        tar_pos = self.target.target_body.position
+        tank_pos = self.tank.chassi_body.position
+        screen.blit(pygame.font.SysFont("Arial", 22).render("LEFT and RIGHT arrow keys to move!", 1, THECOLORS["black"]), (tank_pos[0]-85,self.h - tank_pos[1]+60))
+        screen.blit(pygame.font.SysFont("Arial", 22).render("^HIT THIS^", 1, THECOLORS["black"]), (tar_pos[0]-42,self.h - tar_pos[1]+self.target.radius))

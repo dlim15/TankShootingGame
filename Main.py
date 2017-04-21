@@ -105,7 +105,7 @@ class ApplicationGUI():
         #### TEMPORARY ####
         #Load levels
         i = 1
-        for level in (Level1, Level):
+        for level in (Level1, Level1):
             if i == level_to_play:
                 self.level=level(WIDTH,HEIGHT, self.space, self.screen)
                 break
@@ -158,7 +158,7 @@ class ApplicationGUI():
                 else:
                     self.level.moveTank(0)
 
-                self.level.update_level(self.space, self.get_mouse_pos())
+                self.level.update_level(self.space, self.screen, self.get_mouse_pos())
                 for flying_arrow in self.flying_arrows:
                     drag_constant = 0.0002
 
@@ -177,6 +177,7 @@ class ApplicationGUI():
                     flying_arrow.angular_velocity *= 0.5
                 self.screen.fill(pygame.color.THECOLORS["lightgrey"])
                 self.space.debug_draw(self.draw_options)
+                self.level.write_to_screen(self.screen)
                 if pygame.mouse.get_pressed()[0]:
                     current_time = pygame.time.get_ticks()
                     diff = current_time - start_time
