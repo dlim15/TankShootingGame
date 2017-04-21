@@ -2,6 +2,23 @@ import pygame
 import pymunk
 from pymunk.vec2d import Vec2d
 import pymunk.pygame_util
+from pygame.color import *
+
+class Target():
+    def __init__(self, space, position):
+        self.start_pos = position
+        self.mass = 1
+        self.radius = 25
+        self.moment = pymunk.moment_for_circle(self.mass, self.radius/2, self.radius)
+        self.target_body = pymunk.Body(self.mass, self.moment, pymunk.Body.STATIC)
+        self.target_outerCircle = pymunk.Circle(self.target_body, self.radius)
+        self.target_outerCircle.group = 3
+        self.target_outerCircle.color = (255,55,55)
+
+        self.target_body.position = Vec2d(self.start_pos[0],self.start_pos[1] + self.radius)
+
+        space.add(self.target_body, self.target_outerCircle)
+
 
 class Tank():
     def __init__(self, space, position):
@@ -137,6 +154,8 @@ class Level():
         self.setup_space(space, display)
         self.create_level(WIDTH, HEIGHT, space, display)
         self.tank = Tank(space, Vec2d(100, HEIGHT/5))
+        #self.target = Target(space, Vec2d(WIDTH-100, HEIGHT/5))
+        self.target = Target(space, Vec2d(400, HEIGHT / 5))
 
     def create_border_walls(self, WIDTH, HEIGHT, space):
         self.bottom = HEIGHT/10

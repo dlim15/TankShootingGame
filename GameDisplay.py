@@ -23,6 +23,7 @@ class GameScreen(BaseMenuDisplay):
 
     def backToMain(self):
         self.top.top.attributes("-fullscreen",False)
+        self.top.running = False
         self.top.show_frame(MainMenu)
 
     def addCanvas(self):

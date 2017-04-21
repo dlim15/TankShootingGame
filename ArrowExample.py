@@ -174,7 +174,7 @@ def main():
             # (1-abs(dot)) can be replaced with (1-dot) to make arrows turn
             # around even when fired straight up. Might not be as accurate, but
             # maybe look better.
-            drag_force_magnitude = (1 - abs(dot)) * flight_speed ** 2 * drag_constant * flying_arrow.mass
+            drag_force_magnitude = (1 - dot) * flight_speed ** 2 * drag_constant * flying_arrow.mass
             arrow_tail_position = Vec2d(-50, 0).rotated(flying_arrow.angle)
             flying_arrow.apply_impulse_at_world_point(drag_force_magnitude * -flight_direction, arrow_tail_position)
 

@@ -22,8 +22,18 @@ def stick_arrow_to_target(space, arrow_body, target_body, position, flying_arrow
     except:
         pass
 
+def remove_arrow(space, a, arrow_body, b, other_body, flying_arrows):
+    if b.group == 3:
+        #end level
+        space.remove(other_body, b)
+    try:
+        flying_arrows.remove(arrow_body)
+    except:
+        pass
+    space.remove(arrow_body, a)
+
 def post_solve_arrow_hit(arbiter, space, data):
-    if arbiter.total_impulse.length > 300:
+    if arbiter.total_impulse.length > 30:
         a, b = arbiter.shapes
         position = arbiter.contact_point_set.points[0].point_a
         b.collision_type = 0
@@ -31,11 +41,13 @@ def post_solve_arrow_hit(arbiter, space, data):
         other_body = a.body
         arrow_body = b.body
         space.add_post_step_callback(
-            stick_arrow_to_target, arrow_body, other_body, position, data["flying_arrows"])
+            remove_arrow, b, arrow_body, a, other_body, data["flying_arrows"])
 
 class ApplicationGUI():
     def __init__(self, WIDTH, HEIGHT):
         self.running = False
+        self.w = WIDTH
+        self.h = HEIGHT
         self.clock = pygame.time.Clock()
         self.frameRate = 60
         self.start_root(WIDTH, HEIGHT)
@@ -87,6 +99,9 @@ class ApplicationGUI():
         self.handler.data["flying_arrows"] = self.flying_arrows
         self.handler.post_solve = post_solve_arrow_hit
 
+        self.handler = self.space.add_collision_handler(0,3)
+
+
         #### TEMPORARY ####
         #Load levels
         i = 1
@@ -101,20 +116,24 @@ class ApplicationGUI():
         return pymunk.pygame_util.from_pygame(Vec2d(pygame.mouse.get_pos()), self.screen)
 
     def run(self):
+
+        firstClick = False
+        start_time = -1
         while True:
             fps = 60
             dt = 1. / fps
             self.top.update()
+
             if self.running:
                 for event in pygame.event.get():
                     if event.type == QUIT or \
                                             event.type == KEYDOWN and (event.key in [K_ESCAPE, K_q]):
                         self.running = False
-                    elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and firstClick:
                         start_time = pygame.time.get_ticks()
                     elif event.type == KEYDOWN and event.key == K_p:
                         pygame.image.save(self.screen, "arrows.png")
-                    elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                    elif event.type == pygame.MOUSEBUTTONUP and event.button == 1 and firstClick and start_time != -1:
                         end_time = pygame.time.get_ticks()
 
                         diff = end_time - start_time
@@ -122,10 +141,12 @@ class ApplicationGUI():
                         impulse = power * Vec2d(1, 0)
                         impulse.rotate(self.level.tank.get_arrow_angle())
                         self.flying_arrows.append(self.level.tank.fire_arrow(self.space,self.flying_arrows,impulse))
+                    elif not firstClick and event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                        firstClick = True
 
                 keys = pygame.key.get_pressed()
 
-                speed = 4
+                speed = 7
                 #if (keys[K_UP]):
                 #    cannon_body.position += Vec2d(0, 1) * speed
                 #if (keys[K_DOWN]):
@@ -154,7 +175,7 @@ class ApplicationGUI():
                                                               arrow_tail_position)
 
                     flying_arrow.angular_velocity *= 0.5
-                self.screen.fill(pygame.color.THECOLORS["blue"])
+                self.screen.fill(pygame.color.THECOLORS["lightgrey"])
                 self.space.debug_draw(self.draw_options)
                 if pygame.mouse.get_pressed()[0]:
                     current_time = pygame.time.get_ticks()
@@ -162,12 +183,19 @@ class ApplicationGUI():
                     power = max(min(diff, 1000), 10)
                     h = power / 2
                     pygame.draw.line(self.screen, pygame.color.THECOLORS["red"], (30, 550), (30, 550 - h), 10)
-                self.screen.blit(pygame.font.SysFont("Arial", 16).render("fps: " + str(self.clock.get_fps()), 1, THECOLORS["white"]), (0, 0))
+                self.screen.blit(pygame.font.SysFont("Arial", 16).render("fps: " + str(self.clock.get_fps()), 1, THECOLORS["black"]), (10, 10))
+                self.screen.blit(
+                    pygame.font.SysFont("Arial", 16).render("Angle: " + str(self.level.tank.get_arrow_angle()*57.2958)[0:6] + "°", 1, THECOLORS["black"]),
+                    (self.level.tank.get_cannon_body_position()[0], 2*self.h - self.level.tank.get_cannon_body_position()[1]))
 
+                if not firstClick:
+                    self.screen.blit(pygame.font.SysFont("Arial", 46).render("CLICK TO BEGIN", 1,
+                                                                             THECOLORS["black"]), (self.w/2, self.h/2))
                 pygame.display.flip()
                 self.space.step(dt)
-
-                self.screen.blit(pygame.font.SysFont("Arial", 16).render("fps: " + str(self.clock.get_fps()), 1, THECOLORS["white"]), (20, 100))
+            else:
+                firstClick = False
+                start_time = -1
             self.clock.tick(fps)
 
 
