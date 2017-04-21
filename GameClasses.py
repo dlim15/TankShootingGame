@@ -196,8 +196,8 @@ class Level1(Level):
         tank_pos = self.tank.chassi_body.position
         screen.blit(pygame.font.SysFont("Arial", 22).render("LEFT and RIGHT arrow keys to move!", 1, THECOLORS["black"]), (tank_pos[0]-85,self.h - tank_pos[1]+60))
         screen.blit(pygame.font.SysFont("Arial", 22).render("^HIT THIS^", 1, THECOLORS["black"]), (tar_pos[0]-42,self.h - tar_pos[1]+self.target.radius))
-        screen.blit(pygame.font.SysFont("Arial", 22).render("Aim with mouse, hold LMB to powerup, release to fire", 1, THECOLORS["black"]),
-                    (10, 250))
+        screen.blit(pygame.font.SysFont("Arial", 22).render("Aim with mouse, hold Left Mouse Button to powerup, release to fire", 1, THECOLORS["black"]),
+                    (40, 250))
 
 class Level2(Level):
     def create_level(self, WIDTH, HEIGHT, space, display):

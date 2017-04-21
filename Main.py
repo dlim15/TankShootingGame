@@ -203,20 +203,20 @@ class ApplicationGUI():
                 self.screen.fill(pygame.color.THECOLORS["lightgrey"])
                 self.space.debug_draw(self.draw_options)
                 self.level.write_to_screen(self.screen)
-                if pygame.mouse.get_pressed()[0]:
+                if pygame.mouse.get_pressed()[0] and firstClick:
                     current_time = pygame.time.get_ticks()
                     diff = current_time - start_time
                     power = max(min(diff, 1000), 10)
                     h = power / 2
                     pygame.draw.line(self.screen, pygame.color.THECOLORS["red"], (30, 550), (30, 550 - h), 10)
-                self.screen.blit(pygame.font.SysFont("Arial", 16).render("fps: " + str(self.clock.get_fps()), 1, THECOLORS["black"]), (10, 10))
+                    self.screen.blit(pygame.font.SysFont("Arial", 16).render("Power: " + str(max(min(current_time - start_time, 1000), 10)/10) + "%", 1, THECOLORS["black"]), (10, 10))
                 self.screen.blit(
                     pygame.font.SysFont("Arial", 16).render("Angle: " + str(self.level.tank.get_arrow_angle()*57.2958)[0:6] + "°", 1, THECOLORS["black"]),
                     (self.level.tank.get_cannon_body_position()[0], 2*self.h - self.level.tank.get_cannon_body_position()[1]))
 
                 if not firstClick:
-                    self.screen.blit(pygame.font.SysFont("Arial", 46).render("CLICK TO BEGIN", 1,
-                                                                             THECOLORS["black"]), (self.w*1.3, self.h/2))
+                    self.screen.blit(pygame.font.SysFont("Arial-bold", 73).render("CLICK TO BEGIN", 1,
+                                                                             THECOLORS["black"]), (self.w*1.15, self.h/2))
                 pygame.display.flip()
                 self.space.step(dt)
             else:
