@@ -67,7 +67,7 @@ class InstructionsMenu(BaseMenuDisplay):
         self.instructionFrame = Frame(self.outerFrame,bg="black")
         self.instructionFrame.pack(fill=BOTH, expand = True)
 
-        self.instructions = Label(self.instructionFrame,bg ="black",foreground ="white", text="\n\n\n1) Press left and right buttons to move tank\n"
+        self.instructions = Label(self.instructionFrame,bg ="black",foreground ="white", text="\n\n\n1) Press left and right arrow keys to move tank\n"
                                                               "2) Move mouse to aim tank trajectory\n"
                                                               "3) Click to increase the force of the projectile\n"
                                                               "4) Release mouse to launch", font=("Arial", 14, "bold"),justify = "left")
