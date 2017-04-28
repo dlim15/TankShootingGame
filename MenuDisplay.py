@@ -92,7 +92,7 @@ class LevelSelectMenu(BaseMenuDisplay):
         self.level2Button = Button(self.buttonFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white", text="Level 2",font=("Arial", 24, "bold"),  state=DISABLED)
         self.level2Button.grid(row = 0,column=1, padx = 5, pady=10)
 
-        self.level3Button = Button(self.buttonFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white", text="Level 3",font=("Arial", 24, "bold"),  state=DISABLED)
+        self.level3Button = Button(self.buttonFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white", text="Level 3",font=("Arial", 24, "bold"),  state=DISABLED, command=lambda:self.playGame(3))
         self.level3Button.grid(row = 0,column=2, padx = 5, pady=10)
 
         self.level4Button = Button(self.buttonFrame,bg ="blue",relief = "groove",bd = 10, foreground ="white", text="Level 4", font=("Arial", 24, "bold"), state=DISABLED)

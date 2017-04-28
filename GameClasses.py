@@ -137,10 +137,11 @@ class Tank():
     def create_arrow(self):
         vs = [(-10, 0), (0, 3), (10, 0), (0, -3)]
         mass = 1
-        moment = pymunk.moment_for_poly(mass, vs)
+        radius = 5
+        moment = pymunk.moment_for_circle(mass, radius, radius)
         arrow_body = pymunk.Body(mass, moment)
 
-        arrow_shape = pymunk.Poly(arrow_body, vs)
+        arrow_shape = pymunk.Circle(arrow_body, radius)
         arrow_shape.friction = .5
         arrow_shape.collision_type = 1
         arrow_shape.filter = pymunk.ShapeFilter(categories = 3, mask = 2)
@@ -193,9 +194,7 @@ class Level1(Level):
         pass
     def write_to_screen(self, screen):
         tar_pos = self.target.target_body.position
-        tank_pos = self.tank.chassi_body.position
-        screen.blit(pygame.font.SysFont("Arial", 22).render("LEFT and RIGHT arrow keys to move!", 1, THECOLORS["black"]), (tank_pos[0]-85,self.h - tank_pos[1]+60))
-        screen.blit(pygame.font.SysFont("Arial", 22).render("^HIT THIS^", 1, THECOLORS["black"]), (tar_pos[0]-42,self.h - tar_pos[1]+self.target.radius))
+        screen.blit(pygame.font.SysFont("Arial", 22).render("^HIT^THIS^", 1, THECOLORS["black"]), (tar_pos[0]-42,self.h - tar_pos[1]+self.target.radius))
         screen.blit(pygame.font.SysFont("Arial", 22).render("Aim with mouse, hold Left Mouse Button to powerup, release to fire", 1, THECOLORS["black"]),
                     (40, 250))
 
@@ -204,7 +203,6 @@ class Level2(Level):
         self.wall_body = pymunk.Body(1000, 5, pymunk.Body.STATIC)
         self.wall = pymunk.Poly.create_box(self.wall_body, (150, 4*HEIGHT/8))
         self.wall_body.position = (WIDTH/2, 350)
-        #wall = pymunk.Segment(space.static_body, (WIDTH/2, 5*HEIGHT/8), (WIDTH/2, 0), 150)
         self.wall.group = 1
         self.wall.friction = 1.
         space.add(self.wall_body, self.wall)
@@ -213,6 +211,17 @@ class Level2(Level):
 
 class Level3(Level):
     def create_level(self, WIDTH, HEIGHT, space, display):
-        pass
+        self.wall_body = pymunk.Body(1000, 5, pymunk.Body.STATIC)
+        self.wall = pymunk.Poly.create_box(self.wall_body, (150, 4 * HEIGHT / 8))
+        self.wall_body.position = (WIDTH / 2, 650)
+        self.wall.group = 1
+        self.wall.friction = 1.
+        self.wall_body2 = pymunk.Body(1000, 5, pymunk.Body.STATIC)
+        self.wall2 = pymunk.Poly.create_box(self.wall_body2, (240, 100))
+        self.wall_body2.position = (WIDTH / 2 + 150, (4 * HEIGHT / 8)+ 52)
+        self.wall2.group = 1
+        self.wall2.friction = 1.
+        space.add(self.wall_body, self.wall,self.wall_body2, self.wall2)
     def write_to_screen(self, screen):
-        pass
+        tank_pos = self.tank.chassi_body.position
+        screen.blit(pygame.font.SysFont("Arial", 22).render("LEFT and RIGHT arrow keys to move!", 1, THECOLORS["black"]), (tank_pos[0]-85,self.h - tank_pos[1]+60))

@@ -144,12 +144,14 @@ class ApplicationGUI():
 
         firstClick = False
         start_time = -1
+        timer = 0
         while True:
             fps = 60
             dt = 1. / fps
             self.top.update()
 
             if self.running:
+
                 for event in pygame.event.get():
                     if event.type == QUIT or \
                                             event.type == KEYDOWN and (event.key in [K_ESCAPE, K_q]):
@@ -168,6 +170,7 @@ class ApplicationGUI():
                         self.flying_arrows.append(self.level.tank.fire_arrow(self.space,self.flying_arrows,impulse))
                     elif not firstClick and event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                         firstClick = True
+                        start_time = 0
 
                 keys = pygame.key.get_pressed()
 
@@ -184,41 +187,50 @@ class ApplicationGUI():
                     self.level.moveTank(0)
 
                 self.level.update_level(self.space,self.get_mouse_pos())
-                for flying_arrow in self.flying_arrows:
-                    drag_constant = 0.0002
-
-                    pointing_direction = Vec2d(1, 0).rotated(flying_arrow.angle)
-                    flight_direction = Vec2d(flying_arrow.velocity)
-                    flight_speed = flight_direction.normalize_return_length()
-                    dot = flight_direction.dot(pointing_direction)
-                    # (1-abs(dot)) can be replaced with (1-dot) to make arrows turn
-                    # around even when fired straight up. Might not be as accurate, but
-                    # maybe look better.
-                    drag_force_magnitude = (1 - dot) * flight_speed ** 2 * drag_constant * flying_arrow.mass
-                    arrow_tail_position = Vec2d(-50, 0).rotated(flying_arrow.angle)
-                    flying_arrow.apply_impulse_at_world_point(drag_force_magnitude * -flight_direction,
-                                                              arrow_tail_position)
-
-                    flying_arrow.angular_velocity *= 0.5
+                # for flying_arrow in self.flying_arrows:
+                #     drag_constant = 0.0002
+                #
+                #     pointing_direction = Vec2d(1, 0).rotated(flying_arrow.angle)
+                #     flight_direction = Vec2d(flying_arrow.velocity)
+                #     flight_speed = flight_direction.normalize_return_length()
+                #     dot = flight_direction.dot(pointing_direction)
+                #     # (1-abs(dot)) can be replaced with (1-dot) to make arrows turn
+                #     # around even when fired straight up. Might not be as accurate, but
+                #     # maybe look better.
+                #     drag_force_magnitude = (1 - abs(dot)) * (flight_speed ** 2) * drag_constant * flying_arrow.mass
+                #     arrow_tail_position = Vec2d(-50, 0).rotated(flying_arrow.angle)
+                #     if drag_force_magnitude > -.5:
+                #         drag_force_magnitude = .5
+                #     flying_arrow.apply_impulse_at_world_point(drag_force_magnitude * -flight_direction,
+                #                                               arrow_tail_position)
+                #     print("NEW ARROW")
+                #     print(arrow_tail_position)
+                #     print( str(drag_force_magnitude )+ " * -" +  str(flight_direction) + " = " + str(drag_force_magnitude * -flight_direction))
+                #     print("END ARROW")
+                #
+                #     flying_arrow.angular_velocity *= 0.5
                 self.screen.fill(pygame.color.THECOLORS["lightgrey"])
                 self.space.debug_draw(self.draw_options)
                 self.level.write_to_screen(self.screen)
+                current_time = pygame.time.get_ticks()
                 if pygame.mouse.get_pressed()[0] and firstClick:
-                    current_time = pygame.time.get_ticks()
+
                     diff = current_time - start_time
                     power = max(min(diff, 1000), 10)
                     h = power / 2
                     pygame.draw.line(self.screen, pygame.color.THECOLORS["red"], (30, 550), (30, 550 - h), 10)
                     self.screen.blit(pygame.font.SysFont("Arial", 16).render("Power: " + str(max(min(current_time - start_time, 1000), 10)/10) + "%", 1, THECOLORS["black"]), (10, 10))
+
                 self.screen.blit(
                     pygame.font.SysFont("Arial", 16).render("Angle: " + str(self.level.tank.get_arrow_angle()*57.2958)[0:6] + "°", 1, THECOLORS["black"]),
                     (self.level.tank.get_cannon_body_position()[0], 2*self.h - self.level.tank.get_cannon_body_position()[1]))
-
+                
                 if not firstClick:
                     self.screen.blit(pygame.font.SysFont("Arial-bold", 73).render("CLICK TO BEGIN", 1,
                                                                              THECOLORS["black"]), (self.w*1.15, self.h/2))
                 pygame.display.flip()
                 self.space.step(dt)
+                timer += current_time - start_time
             else:
                 firstClick = False
                 start_time = -1
