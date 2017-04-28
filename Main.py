@@ -16,6 +16,7 @@ levelInfo = [
     (Vec2d(100, 200), Vec2d(1000,175)),
     (Vec2d(100, 200), Vec2d(1300,175)),
     (Vec2d(100, 200), Vec2d(1000,600))
+
 ]
 
 def stick_arrow_to_target(space, arrow_body, target_body, position, flying_arrows):
